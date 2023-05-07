@@ -1,4 +1,4 @@
-%% supplemental Fig.6: segregation analysis
+%% supplemental Fig.7: segregation analysis
 %% data prepare for following analysis
 %cluster
 group_dat={};
@@ -116,13 +116,15 @@ ctime1=countTime_ensem_all{2,1};
 ctime2=countTime_ensem_all{9,2};
 
 [bx1,by1]=boundary_from_binImg(fr1,0.5,1);
-subplot(2,1,1);ratemap_plot(fr1,ctime1,1,0,[]);hold on; plot(bx1,by1,'--','color','k'); % Ntg old
+subplot(2,1,1);ratemap_plot(fr1,ctime1,1,0,[]);hold on; plot(bx1{1},by1{1},'--','color','k'); % Ntg old
 [bx2,by2]=boundary_from_binImg(fr2,0.5,1);
-subplot(2,1,2);ratemap_plot(fr2,ctime2,1,0,[]);hold on; plot(bx2,by2,'--','color','k'); % Ntg old
+subplot(2,1,2);ratemap_plot(fr2,ctime2,1,0,[]);hold on; plot(bx2{1},by2{1},'--','color','k'); % Ntg old
 
 colormap(jet)
 
 % illustrate overlap
+binsize=10;
+
 figure;
 colorclust=distinguishable_colors(10);
 colorclust(4,:)=colorclust(10,:)
@@ -180,13 +182,13 @@ for i=1:12
     all_overlap_sqr=[all_overlap_sqr,overlap_idx1{i,2}];
 end
 subplot(121);
-histogram(all_overlap_cir,'binWidth',0.01); hold on;
-ptile79=quantile(all_overlap_cir,0.9321);
+histogram(all_overlap_cir,'binWidth',0.1); hold on;
+ptile79=quantile(all_overlap_cir,0.86);
 plot(ones(1,100)*ptile79,[1:100],'--')
 set(gcf,'renderer','painters');
 subplot(122);
-histogram(all_overlap_sqr,'binWidth',0.01); hold on;
-ptile67=quantile(all_overlap_sqr,0.8903);
+histogram(all_overlap_sqr,'binWidth',0.1); hold on;
+ptile67=quantile(all_overlap_sqr,0.75);
 plot(ones(1,100)*ptile67,[1:100],'--')
 set(gcf,'renderer','painters');
 

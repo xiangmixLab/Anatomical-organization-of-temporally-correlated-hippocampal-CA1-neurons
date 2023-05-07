@@ -1,0 +1,422 @@
+%% Figure 3: Anatomical cluster-specific calcium event activities vary across different environments.
+run('D:\Xu_clusterting_paper_prep11_2020\final_code\data_prepare\neuron_data_info.m')
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% tri-cir-sqr secion %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+all_colors=distinguishable_colors(10);
+load(['D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\overlap_cluster\Fig_1_3_multiGeo_cluster_overlap.mat'])
+load(['D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\overlap_half_trial_cluster\Fig_1_3_multiGeo_cluster_overlap_half.mat'])
+
+mice=1; % chosen example mice for behav and footprint illustration
+
+%% load all behav data
+all_behav={};
+for i=1:length(foldername_multiGeo)
+    load([foldername_multiGeo{i},'\','behav.mat'])
+    for j=1:length(behavIndividuals)
+        all_behav{i,j}=behavIndividuals{j};
+    end
+end
+
+%% A. tri-cir-sqr traj
+figure;
+for i=1:length(behavIndividuals)
+    subplot(2,3,i);
+    plot(all_behav{mice,i}.position(:,1),all_behav{mice,i}.position(:,2),'color',[0.5 0.5 0.5],'lineWidth',2);
+    set(gcf,'renderer','painters');
+end
+
+%% B: tri-cir-sqr footprint
+
+load([foldername_multiGeo{mice},'\','neuronIndividuals_new.mat'])
+
+group=group_ori_multiGeo_sameNum_allMice(mice,:);
+for j=1:length(neuronIndividuals_new)  
+    [~,group_cond_j_reindexed]=determineSharedCells_new(group{1},group{j}); % try to reIndex the clusters to make the color assignment similar to the first trial
+    [A_color{1,j},A_color_region{1,j}]=DBSCAN_region_quantify_022422(group_cond_j_reindexed,neuronIndividuals_new,[]);
+end
+
+% plot footprint 
+figure;
+for j=1:length(neuronIndividuals_new)  
+    subplot(2,3,j);
+    imagesc(imrotate(A_color{1,j},-135));
+end
+
+% plot region
+figure;
+for j=1:length(neuronIndividuals_new)  
+    subplot(2,3,j);
+    imagesc(imrotate(A_color_region{1,j},-135));
+end
+
+
+%% C: pearson correlation for first/second half trials, same geo
+
+% half and full trial ratemap calculation
+[behavpos_half_ratemap,fr_all,behavpos_half_ct,ct_all]=half_and_full_trial_ratemap_calculation(foldername_multiGeo);
+
+% half trial ratemap corr
+[rateMap_corr_all_halves_tri_cir_sqr]=half_trial_ratemap_corr(behavpos_half_ratemap,behavpos_half_ct);
+
+% full trial
+rateMap_corr_all_tri_cir_sqr=[];
+rateMap_corr_full_tri_cir_sqr=[];
+
+tic;
+for tk=1:size(fr_all,1)        
+  
+    % same geo diff day
+   rateMap_corr1=rateMap_correlation(fr_all{tk,1},fr_all{tk,6},ct_all{tk,1},ct_all{tk,6},1,1);
+   rateMap_corr2=rateMap_correlation(fr_all{tk,2},fr_all{tk,4},ct_all{tk,2},ct_all{tk,4},1,1);  
+   rateMap_corr3=rateMap_correlation(fr_all{tk,3},fr_all{tk,5},ct_all{tk,3},ct_all{tk,5},1,1);  
+   
+   rateMap_corr_full_tri_cir_sqr(tk,:)=[mean([nanmean(rateMap_corr1),nanmean(rateMap_corr2),nanmean(rateMap_corr3)],2)];
+toc;
+end
+rateMap_corr_all_tri_cir_sqr=[rateMap_corr_all_halves_tri_cir_sqr,rateMap_corr_full_tri_cir_sqr];
+
+%% D: cluster overlap tri_cir_sqr
+shuffle=1000;
+
+% half trial
+[overlap_half,overlap_half_shuf]=half_trial_overlap(group_ori_multiGeo_half,shuffle);
+
+% full trial
+tri1_tri2_overlap=[];
+cir1_cir2_overlap=[];
+sqr1_sqr2_overlap=[];
+tri1_cir1_overlap=[];
+cir1_sqr1_overlap=[];
+tir1_sqr1_overlap=[];
+tri2_cir2_overlap=[];
+cir2_sqr2_overlap=[];
+tri2_sqr2_overlap=[];
+tri1_cir2_overlap=[];
+tri1_sqr2_overlap=[];
+cir1_tri2_overlap=[];
+cir1_sqr2_overlap=[];
+sqr1_tri2_overlap=[];
+sqr1_cir2_overlap=[];
+
+tri1_tri2_shuffle_overlap=[];
+cir1_cir2_shuffle_overlap=[];
+sqr1_sqr2_shuffle_overlap=[];
+tri1_cir1_shuffle_overlap=[];
+cir1_sqr1_shuffle_overlap=[];
+tir1_sqr1_shuffle_overlap=[];
+tri2_cir2_shuffle_overlap=[];
+cir2_sqr2_shuffle_overlap=[];
+tri2_sqr2_shuffle_overlap=[];
+tri1_cir2_shuffle_overlap=[];
+tri1_sqr2_shuffle_overlap=[];
+cir1_tri2_shuffle_overlap=[];
+cir1_sqr2_shuffle_overlap=[];
+sqr1_tri2_shuffle_overlap=[];
+sqr1_cir2_shuffle_overlap=[];
+
+mice_all=[1:6];
+
+for i=1:size(group_ori_multiGeo_sameNum_allMice,1)
+    mice=i;
+    group=group_record(mice,:);
+    g1=group{1};
+    g2=group{2};
+    g3=group{3};
+    g4=group{4};
+    g5=group{5};
+    g6=group{6};
+
+    [tri1_tri2_overlap(i,1)]=new_cluster_overlap_latest(g1,g6);
+    [cir1_cir2_overlap(i,1)]=new_cluster_overlap_latest(g2,g4);
+    [sqr1_sqr2_overlap(i,1)]=new_cluster_overlap_latest(g3,g5);
+    [tri1_cir1_overlap(i,1)]=new_cluster_overlap_latest(g1,g2);
+    [cir1_sqr1_overlap(i,1)]=new_cluster_overlap_latest(g2,g3);
+    [tir1_sqr1_overlap(i,1)]=new_cluster_overlap_latest(g1,g3);
+    [tri2_cir2_overlap(i,1)]=new_cluster_overlap_latest(g6,g4);
+    [cir2_sqr2_overlap(i,1)]=new_cluster_overlap_latest(g4,g5);
+    [tri2_sqr2_overlap(i,1)]=new_cluster_overlap_latest(g6,g5);
+    [tri1_cir2_overlap(i,1)]=new_cluster_overlap_latest(g1,g4);
+    [tri1_sqr2_overlap(i,1)]=new_cluster_overlap_latest(g1,g5);
+    [cir1_tri2_overlap(i,1)]=new_cluster_overlap_latest(g2,g5);
+    [cir1_sqr2_overlap(i,1)]=new_cluster_overlap_latest(g2,g6);
+    [sqr1_tri2_overlap(i,1)]=new_cluster_overlap_latest(g3,g4);
+    [sqr1_cir2_overlap(i,1)]=new_cluster_overlap_latest(g3,g6);
+
+    
+    for j=1:shuffle
+        g1=group{1}(randperm(length(group{1})));
+        g2=group{2}(randperm(length(group{2})));
+        g3=group{3}(randperm(length(group{3})));
+        g4=group{4}(randperm(length(group{4})));
+        g5=group{5}(randperm(length(group{5})));
+        g6=group{6}(randperm(length(group{6})));       
+
+        [tri1_tri2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g1,g6);
+        [cir1_cir2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g2,g4);
+        [sqr1_sqr2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g3,g5);
+        [tri1_cir1_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g1,g2);
+        [cir1_sqr1_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g2,g3);
+        [tir1_sqr1_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g1,g3);
+        [tri2_cir2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g6,g4);
+        [cir2_sqr2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g4,g5);
+        [tri2_sqr2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g6,g5);
+        [tri1_cir2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g1,g4);
+        [tri1_sqr2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g1,g5);
+        [cir1_tri2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g2,g5);
+        [cir1_sqr2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g2,g6);
+        [sqr1_tri2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g3,g4);
+        [sqr1_cir2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g3,g6);
+    end
+end
+
+tri1_tri2_shuffle_overlap=mean(tri1_tri2_shuffle_overlap,2);
+cir1_cir2_shuffle_overlap=mean(cir1_cir2_shuffle_overlap,2);
+sqr1_sqr2_shuffle_overlap=mean(sqr1_sqr2_shuffle_overlap,2);
+tri1_cir1_shuffle_overlap=mean()
+overlap_all=[overlap_half,mean([tri1_tri2_overlap,cir1_cir2_overlap,sqr1_sqr2_overlap],2),mean([tri1_cir1_overlap,cir1_sqr1_overlap,tir1_sqr1_overlap,tri2_cir2_overlap,cir2_sqr2_overlap,tri2_sqr2_overlap],2),mean([tri1_cir2_overlap,tri1_sqr2_overlap,cir1_sqr2_overlap,cir1_tri2_overlap,sqr1_cir2_overlap,sqr1_tri2_overlap],2)];
+
+overlap_shuf_all=[overlap_half_shuf,mean([mean(tri1_tri2_shuffle_overlap,2),cir1_cir2_shuffle_overlap;sqr1_sqr2_shuffle_overlap);tri1_cir1_shuffle_overlap;cir1_sqr1_shuffle_overlap;tir1_sqr1_shuffle_overlap;tri2_cir2_shuffle_overlap;cir2_sqr2_shuffle_overlap;tri2_sqr2_shuffle_overlap;tri1_cir2_shuffle_overlap;tri1_sqr2_shuffle_overlap;cir1_tri2_shuffle_overlap;cir1_sqr2_shuffle_overlap;sqr1_tri2_shuffle_overlap;sqr1_cir2_shuffle_overlap];
+
+ranksum_test_summary=[];
+for i=1:size(rand_all,2)-1
+    for j=i+1:size(rand_all,2)
+        ranksum_test_summary(i,j)=ranksum(rand_all(:,i),rand_all(:,j));
+    end
+end
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%% linear track section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+load(['D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\overlap_cluster\Fig_3_track_cluster_overlap.mat'])
+load(['D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\overlap_half_trial_cluster\Fig_3_track_cluster_overlap_half.mat'])
+foldername=foldername_LT;
+
+%% E: linear track behav
+figure;
+load([foldername{1},'\','neuronIndividuals_new.mat'])
+load([foldername{1},'\','behav.mat'])
+
+subplot(131);
+behavpos_new=behavIndividuals{1}.position;
+plot(behavpos_new(:,1),behavpos_new(:,2),'color',[0.5 0.5 0.5],'lineWidth',2);
+xlim([0 1000]);
+subplot(132);
+behavpos_new=behavIndividuals{2}.position;
+plot(behavpos_new(:,1),behavpos_new(:,2),'color',[0.5 0.5 0.5],'lineWidth',2);
+xlim([0 1000]);
+subplot(133);
+behavpos_new=behavIndividuals{3}.position;
+plot(behavpos_new(:,1),behavpos_new(:,2),'color',[0.5 0.5 0.5],'lineWidth',2);
+ylim([0 1000]);
+
+%% F: linear track footprint
+
+mice=4;
+load([foldername_LT{mice},'\','neuronIndividuals_new.mat'])
+
+group=group_ori_LT_sameNum_allMice(mice,:);
+for j=1:length(neuronIndividuals_new)  
+    [~,group_cond_j_reindexed]=determineSharedCells_new(group{1},group{j}); % try to reIndex the clusters to make the color assignment similar to the first trial
+    [A_color{1,j},A_color_region{1,j}]=DBSCAN_region_quantify_022422(group_cond_j_reindexed,neuronIndividuals_new,[]);
+end
+
+% plot footprint 
+figure;
+for j=1:length(neuronIndividuals_new)  
+    subplot(2,3,j);
+    imagesc(imrotate(A_color{1,j},-135));
+end
+
+% plot region
+figure;
+for j=1:length(neuronIndividuals_new)  
+    subplot(2,3,j);
+    imagesc(imrotate(A_color_region{1,j},-135));
+end
+
+%% G: pearson correlation between same cells in diff track
+
+[behavpos_half_ratemap,fr_all,behavpos_half_ct,ct_all]=half_and_full_trial_ratemap_calculation(foldername_LT);
+
+% half trial ratemap corr
+[rateMap_corr_all_halves_LT]=half_trial_ratemap_corr(behavpos_half_ratemap,behavpos_half_ct);
+
+% full trial
+rateMap_corr_all_LT=[];
+rateMap_corr_full_LT=[];
+
+tic;
+for tk=1:size(fr_all,1)       
+  
+    % same geo diff day
+   rateMap_corr1=rateMap_correlation(fr_all{tk,1},fr_all{tk,2},ct_all{tk,1},ct_all{tk,2},1,1);
+   rateMap_corr2=rateMap_correlation(fr_all{tk,1},fr_all{tk,3},ct_all{tk,1},ct_all{tk,3},1,1);  
+   rateMap_corr3=rateMap_correlation(fr_all{tk,2},fr_all{tk,3},ct_all{tk,2},ct_all{tk,3},1,1);  
+   
+   rateMap_corr_full_LT(tk,:)=[nanmean(rateMap_corr1),nanmean(rateMap_corr2),nanmean(rateMap_corr3)];
+toc;
+end
+rateMap_corr_all_LT=[rateMap_corr_all_halves_LT,rateMap_corr_full_LT];
+
+significance_check=[ranksum(rateMap_corr_all_LT(:,1),rateMap_corr_all_LT(:,3)),ranksum(rateMap_corr_all_LT(:,1),rateMap_corr_all_LT(:,4)),ranksum(rateMap_corr_all_LT(:,2),rateMap_corr_all_LT(:,3)),ranksum(rateMap_corr_all_LT(:,2),rateMap_corr_all_LT(:,4))]
+% % visualize 1d ratemaps across cells
+% [all_1D_ratemaps1,cell_idx]=all_1D_ratemap_cal(neuronIndividuals_new{1},behavIndividuals{1}.position,behavIndividuals{1}.time);
+% [all_1D_ratemaps2]=all_1D_ratemap_cal(neuronIndividuals_new{2},behavIndividuals{2}.position,behavIndividuals{2}.time);
+% [all_1D_ratemaps3]=all_1D_ratemap_cal(neuronIndividuals_new{3},behavIndividuals{3}.position,behavIndividuals{3}.time);
+% subplot(131);imagesc(all_1D_ratemaps1(cell_idx,:)); colormap(jet)
+% subplot(132);imagesc(all_1D_ratemaps2(cell_idx,:)); colormap(jet)
+% subplot(133);imagesc(all_1D_ratemaps3(cell_idx,:)); colormap(jet)
+
+%% H: cluster overlap linear track
+shuffle=1000;
+
+% half trial
+[overlap_half,overlap_half_shuf]=half_trial_overlap(group_ori_LT_half,shuffle);
+
+% full trial
+h1_h2_overlap=[];
+h2_v_overlap=[];
+h1_v_overlap=[];
+h1_h2_shuffle_overlap=[];
+h2_v_shuffle_overlap=[];
+h1_v_shuffle_overlap=[];
+
+for i=1:size(group_ori_LT_sameNum_allMice,1)
+    gp=group_ori_LT_sameNum_allMice(i,:);
+    [h1_h2_overlap(i,1)]=new_cluster_overlap_latest(gp{1},gp{2});
+    [h1_v_overlap(i,1)]=new_cluster_overlap_latest(gp{1},gp{3});
+    [h2_v_overlap(i,1)]=new_cluster_overlap_latest(gp{2},gp{3});
+
+    for j=1:shuffle
+        g1=gp{1}(randperm(length(gp{1})));
+        g2=gp{2}(randperm(length(gp{2})));
+        g3=gp{3}(randperm(length(gp{3})));
+        [h1_h2_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g1,g2);
+        [h2_v_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g2,g3);
+        [h1_v_shuffle_overlap(i,j)]=new_cluster_overlap_latest(g1,g3);
+    end
+end
+
+% data summary
+dat_shuf=[quantile(overlap_half_shuf,0.95,2),quantile(h1_h2_shuffle_overlap,0.95,2),quantile(h1_v_shuffle_overlap,0.95,2),quantile(h2_v_shuffle_overlap,0.95,2)];
+dat_1=[overlap_half,h1_h2_overlap,h1_v_overlap,h2_v_overlap];
+
+disp([ranksum(dat_1(:,1),dat_1(:,3)),ranksum(dat_1(:,1),dat_1(:,4)),ranksum(dat_1(:,2),dat_1(:,3)),ranksum(dat_1(:,2),dat_1(:,4))])
+
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%% barrier track section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+load(['D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\overlap_cluster\Fig_3_barrier_cluster_overlap.mat'])
+load(['D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\overlap_half_trial_cluster\Fig_3_barrier_cluster_overlap_half.mat'])
+foldername=foldername_AI163;
+
+%% I: barrier behav
+figure;
+load([foldername{1},'\','neuronIndividuals_new.mat'])
+load([foldername{1},'\','behav.mat'])
+
+subplot(321);
+behavpos_new=behavIndividuals{1}.position;
+plot(behavpos_new(:,1),behavpos_new(:,2),'color',[0.5 0.5 0.5],'lineWidth',2);
+subplot(323);
+behavpos_new=behavIndividuals{2}.position;
+plot(behavpos_new(:,1),behavpos_new(:,2),'color',[0.5 0.5 0.5],'lineWidth',2);
+subplot(325);
+behavpos_new=behavIndividuals{3}.position;
+plot(behavpos_new(:,1),behavpos_new(:,2),'color',[0.5 0.5 0.5],'lineWidth',2);
+subplot(322);
+behavpos_new=behavIndividuals{4}.position;
+plot(behavpos_new(:,1),behavpos_new(:,2),'color',[0.5 0.5 0.5],'lineWidth',2);
+subplot(324);
+behavpos_new=behavIndividuals{5}.position;
+plot(behavpos_new(:,1),behavpos_new(:,2),'color',[0.5 0.5 0.5],'lineWidth',2);
+subplot(326);
+behavpos_new=behavIndividuals{6}.position;
+plot(behavpos_new(:,1),behavpos_new(:,2),'color',[0.5 0.5 0.5],'lineWidth',2);
+
+
+%% J: barrier footprint
+
+mice=1;
+load([foldername{mice},'\','neuronIndividuals_new.mat'])
+
+group=group_ori_AI163_sameNum_allMice(mice,:);
+for j=1:6
+    [~,group_cond_j_reindexed]=determineSharedCells_new(group{1},group{j}); % try to reIndex the clusters to make the color assignment similar to the first trial
+    [A_color{1,j},A_color_region{1,j}]=DBSCAN_region_quantify_022422(group_cond_j_reindexed,neuronIndividuals_new,[]);
+end
+
+% plot footprint 
+figure;
+for j=1:length(neuronIndividuals_new)  
+    subplot(2,3,j);
+    imagesc(imrotate(A_color{1,j},-135));
+end
+
+% plot region
+figure;
+for j=1:length(neuronIndividuals_new)  
+    subplot(2,3,j);
+    imagesc(imrotate(A_color_region{1,j},-135));
+end
+
+%% K: pearson correlation 
+
+[behavpos_half_ratemap,fr_all,behavpos_half_ct,ct_all]=half_and_full_trial_ratemap_calculation(foldername);
+
+% full trial
+rateMap_corr_all_AI163=[];
+rateMap_corr_full_AI163=[];
+
+tic;
+for tk=1:size(fr_all,1)       
+  
+    % same geo diff day
+   rateMap_corr1=rateMap_correlation(fr_all{tk,1},fr_all{tk,3},ct_all{tk,1},ct_all{tk,3},1,1);
+   rateMap_corr2=rateMap_correlation(fr_all{tk,4},fr_all{tk,6},ct_all{tk,4},ct_all{tk,6},1,1);  
+   rateMap_corr3=rateMap_correlation(fr_all{tk,4},fr_all{tk,5},ct_all{tk,4},ct_all{tk,5},1,1);  
+   rateMap_corr4=rateMap_correlation(fr_all{tk,5},fr_all{tk,6},ct_all{tk,5},ct_all{tk,6},1,1);  
+
+   rateMap_corr_full_AI163(tk,:)=[nanmean(rateMap_corr1),nanmean(rateMap_corr2),nanmean(rateMap_corr3),nanmean(rateMap_corr4)];
+toc;
+end
+rateMap_corr_all_AI163=[rateMap_corr_full_AI163];
+
+significance_check=[ranksum(rateMap_corr_all_AI163(:,1),rateMap_corr_all_AI163(:,2)),ranksum(rateMap_corr_all_AI163(:,1),rateMap_corr_all_AI163(:,3)),ranksum(rateMap_corr_all_AI163(:,1),rateMap_corr_all_AI163(:,4)),ranksum(rateMap_corr_all_AI163(:,2),rateMap_corr_all_AI163(:,3)),ranksum(rateMap_corr_all_AI163(:,2),rateMap_corr_all_AI163(:,4)),ranksum(rateMap_corr_all_AI163(:,3),rateMap_corr_all_AI163(:,4))]
+
+
+%% L: cluster overlap 
+shuffle=1000;
+
+% full trial
+dat_1=[];
+dat_shuf=[];
+
+for i=1:size(group_ori_AI163_sameNum_allMice,1)
+    gp=group_ori_AI163_sameNum_allMice(i,:);
+    dat_1(i,1)=new_cluster_overlap_latest(gp{1},gp{2});
+    dat_1(i,2)=new_cluster_overlap_latest(gp{1},gp{3});
+    dat_1(i,3)=new_cluster_overlap_latest(gp{1},gp{4});
+    dat_1(i,4)=new_cluster_overlap_latest(gp{2},gp{3});
+    dat_1(i,5)=new_cluster_overlap_latest(gp{2},gp{4});
+    dat_1(i,6)=new_cluster_overlap_latest(gp{3},gp{4});
+
+    for j=1:shuffle
+        g1=gp{1}(randperm(length(gp{1})));
+        g2=gp{2}(randperm(length(gp{2})));
+        g3=gp{3}(randperm(length(gp{3})));
+        g4=gp{4}(randperm(length(gp{4})));
+        g5=gp{5}(randperm(length(gp{5})));
+        g6=gp{6}(randperm(length(gp{6})));
+        dat_shuf(i,1,j)=new_cluster_overlap_latest(g1,g2);
+        dat_shuf(i,2,j)=new_cluster_overlap_latest(g1,g3);
+        dat_shuf(i,3,j)=new_cluster_overlap_latest(g1,g4);
+        dat_shuf(i,4,j)=new_cluster_overlap_latest(g2,g3);
+        dat_shuf(i,5,j)=new_cluster_overlap_latest(g2,g4);
+        dat_shuf(i,6,j)=new_cluster_overlap_latest(g3,g4);
+    end
+end
+
+% data summary
+dat_shuf=quantile(dat_shuf,0.95,3);
+
+disp([ranksum(dat_1(:,1),dat_1(:,3)),ranksum(dat_1(:,1),dat_1(:,4)),ranksum(dat_1(:,2),dat_1(:,3)),ranksum(dat_1(:,2),dat_1(:,4))])

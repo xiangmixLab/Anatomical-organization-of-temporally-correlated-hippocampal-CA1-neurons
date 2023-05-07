@@ -58,6 +58,13 @@ cdfplot(cell2mat(intra_all')); hold on;
 cdfplot(cell2mat(inter_all'));
 cdfplot(cell2mat(intra_shuffle_all'));
 
+intra_all_m=[];
+inter_all_m=[];
+
+for i=1:length(intra_all)
+    intra_all_m(i,1)=mean(intra_all{i});
+    inter_all_m(i,1)=mean(inter_all{i});
+end
 %% G: anatomical cluster footprint
 load([foldername_multiGeo{6},'\','neuronIndividuals_new.mat'])
 [A_color1,A_color_region1]=DBSCAN_region_quantify_022422(group_ori_multiGeo{6,2},neuronIndividuals_new,[]);
@@ -120,6 +127,8 @@ xlim([-1 9])
 %% J: distance-temporal correlation plot
 
 [all_dis_corr_circle_all_intra,all_dis_corr_circle_all_inter,all_dis_corr_circle_all_all,midx,f,gof]=pairwise_dis_tempCorr_031123(foldername_multiGeo,group_ori_multiGeo,2);
+f1=f{1};
+f2=f{2};
 
 x_intra=linspace( min(all_dis_corr_circle_all_intra(:,1)), max(all_dis_corr_circle_all_intra(:,1)), 100)';
 y_intra=f1.a*x_intra.^f1.b+f1.c;
@@ -142,7 +151,7 @@ mean(all_dis_corr_circle_all_inter(:,2))
 std(all_dis_corr_circle_all_inter(:,2))/length(all_dis_corr_circle_all_inter(:,2))^0.5
 
 % test the intra-cluster and inter-cluster curves
-[h,p] = kstest2(y_intra,y_inter)
+signrank(y_intra,y_inter)
 
 % spearman correlation of cyan curve 
 [rho,pval] = corr(all_dis_corr_circle_all_all(1:100:end,1),all_dis_corr_circle_all_all(1:100:end,2),'Type','spearman','Rows','complete')

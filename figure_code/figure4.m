@@ -1,37 +1,37 @@
 %% sleep 
 %% actually, immobility. as mice will be immobile for a short period and may shift position in middle, for persentation only the first immobility session is shown here
 behav_vid={
-    'X:\Lab\DataImages\Yanjun\Yanjun_nnRevision\Miniscope_OLM_raw\12_18_2018_Baseline\M3422F\behavCam2.avi','D:\Sleep exp\08082019_sleep_3422\3422_sleep1_7min_last10seconds wake\behavCam1_2.avi';
-    'X:\Lab\DataImages\Yanjun\Yanjun_nnRevision\Miniscope_OLM_raw\12_18_2018_Baseline\M3424F\behavCam2.avi','D:\Sleep exp\08092019_sleep_3424\sleep1_8min_last1min wakeup\behavCam1_2.avi';
-    'X:\Lab\DataImages\Yanjun\Yanjun_nnRevision\Miniscope_OLM_raw\12_18_2018_Baseline\M3425F\behavCam2.avi','D:\Sleep exp\08072019_Sleep_3425\sleep6_5min_not move_start move last10s\behavCam1_2.avi';  
-    'X:\Lab\DataImages\Yanjun\Yanjun_nnRevision\Miniscope_OLM_raw\12_18_2018_Baseline\M3425F\behavCam2.avi','D:\Sleep exp\08072019_Sleep_3425\sleep6_5min_not move_start move last10s\behavCam1_2.avi';    
-    'X:\Lab\DataImages\Yanjun\Yanjun_nnRevision\Miniscope_OLM_raw\12_18_2018_Baseline\M3425F\behavCam2.avi','D:\Sleep exp\08072019_Sleep_3425\sleep6_5min_not move_start move last10s\behavCam1_2.avi';    
+    'X:\Lab\DataImages\Yanjun\Yanjun_nnRevision\Miniscope_OLM_raw\12_18_2018_Baseline\M3422F\behavCam2.avi','K:\Cluster_paper_data\Sleep exp\08082019_sleep_3422\3422_sleep1_7min_last10seconds wake\behavCam1_2.avi';
+    'X:\Lab\DataImages\Yanjun\Yanjun_nnRevision\Miniscope_OLM_raw\12_18_2018_Baseline\M3424F\behavCam2.avi','K:\Cluster_paper_data\Sleep exp\08092019_sleep_3424\sleep1_8min_last1min wakeup\behavCam1_2.avi';
+    'X:\Lab\DataImages\Yanjun\Yanjun_nnRevision\Miniscope_OLM_raw\12_18_2018_Baseline\M3425F\behavCam2.avi','K:\Cluster_paper_data\Sleep exp\08072019_Sleep_3425\sleep6_5min_not move_start move last10s\behavCam1_2.avi';  
+    'X:\Lab\DataImages\Yanjun\Yanjun_nnRevision\Miniscope_OLM_raw\12_18_2018_Baseline\M3425F\behavCam2.avi','K:\Cluster_paper_data\Sleep exp\08072019_Sleep_3425\sleep6_5min_not move_start move last10s\behavCam1_2.avi';    
+    'X:\Lab\DataImages\Yanjun\Yanjun_nnRevision\Miniscope_OLM_raw\12_18_2018_Baseline\M3425F\behavCam2.avi','K:\Cluster_paper_data\Sleep exp\08072019_Sleep_3425\sleep6_5min_not move_start move last10s\behavCam1_2.avi';    
     };
 
 
 neuronDat={
-    'D:\Sleep exp\3422_result_102919\sleep\further_processed_neuron_extraction_final_result.mat','D:\Sleep exp\3422_result_102919\sleep\further_processed_neuron_extraction_final_result.mat';
-    'D:\Sleep exp\3424_result_102919\active_sleep\further_processed_neuron_extraction_final_result.mat','D:\Sleep exp\3424_result_102919\active_sleep\further_processed_neuron_extraction_final_result.mat';
-    'D:\Sleep exp\3425_result_102919\further_processed_neuron_extraction_final_result.mat','D:\Sleep exp\3425_result_102919\further_processed_neuron_extraction_final_result.mat';
-    'D:\Sleep exp\270_result\further_processed_neuron_extraction_final_result.mat','D:\Sleep exp\270_result\further_processed_neuron_extraction_final_result.mat';
-    'D:\Sleep exp\2833_result\further_processed_neuron_extraction_final_result.mat','D:\Sleep exp\2833_result\further_processed_neuron_extraction_final_result.mat';
+    'K:\Cluster_paper_data\Sleep exp\3422_result_102919\sleep\further_processed_neuron_extraction_final_result.mat','K:\Cluster_paper_data\Sleep exp\3422_result_102919\sleep\further_processed_neuron_extraction_final_result.mat';
+    'K:\Cluster_paper_data\Sleep exp\3424_result_102919\active_sleep\further_processed_neuron_extraction_final_result.mat','K:\Cluster_paper_data\Sleep exp\3424_result_102919\active_sleep\further_processed_neuron_extraction_final_result.mat';
+    'K:\Cluster_paper_data\Sleep exp\3425_result_102919\further_processed_neuron_extraction_final_result.mat','K:\Cluster_paper_data\Sleep exp\3425_result_102919\further_processed_neuron_extraction_final_result.mat';
+    'K:\Cluster_paper_data\Sleep exp\270_result\further_processed_neuron_extraction_final_result.mat','K:\Cluster_paper_data\Sleep exp\270_result\further_processed_neuron_extraction_final_result.mat';
+    'K:\Cluster_paper_data\Sleep exp\2833_result\further_processed_neuron_extraction_final_result.mat','K:\Cluster_paper_data\Sleep exp\2833_result\further_processed_neuron_extraction_final_result.mat';
     }
 
 behavDat={
-    'D:\Sleep exp\3422_result_102919\sleep\awake_results\current_condition_behav.mat',{'D:\Sleep exp\3422_result_102919\sleep\sleep1_results\current_condition_behav.mat','D:\Sleep exp\3422_result_102919\sleep\sleep2_results\current_condition_behav.mat','D:\Sleep exp\3422_result_102919\sleep\sleep3_results\current_condition_behav.mat'};
-    'D:\Sleep exp\3424_result_102919\active_sleep\active_results\current_condition_behav.mat',{'D:\Sleep exp\3424_result_102919\active_sleep\sleep1_results\current_condition_behav.mat','D:\Sleep exp\3424_result_102919\active_sleep\sleep2_results\current_condition_behav.mat','D:\Sleep exp\3424_result_102919\active_sleep\sleep3_results\current_condition_behav.mat'};
-    'D:\Sleep exp\3425_result_102919\active_results\current_condition_behav.mat',{'D:\Sleep exp\3425_result_102919\sleep1_results\current_condition_behav.mat','D:\Sleep exp\3425_result_102919\sleep2_results\current_condition_behav.mat','D:\Sleep exp\3425_result_102919\sleep3_results\current_condition_behav.mat','D:\Sleep exp\3425_result_102919\sleep4_results\current_condition_behav.mat','D:\Sleep exp\3425_result_102919\sleep5_results\current_condition_behav.mat','D:\Sleep exp\3425_result_102919\sleep6_results\current_condition_behav.mat'};
-    'D:\Sleep exp\270_result\active_bright_Behav.mat',{'D:\Sleep exp\270_result\sleep_dark_Behav.mat'};
-    'D:\Sleep exp\2833_result\active_bright_Behav.mat',{'D:\Sleep exp\2833_result\sleep_dark_Behav.mat'};
+    'K:\Cluster_paper_data\Sleep exp\3422_result_102919\sleep\awake_results\current_condition_behav.mat',{'K:\Cluster_paper_data\Sleep exp\3422_result_102919\sleep\sleep1_results\current_condition_behav.mat','K:\Cluster_paper_data\Sleep exp\3422_result_102919\sleep\sleep2_results\current_condition_behav.mat','K:\Cluster_paper_data\Sleep exp\3422_result_102919\sleep\sleep3_results\current_condition_behav.mat'};
+    'K:\Cluster_paper_data\Sleep exp\3424_result_102919\active_sleep\active_results\current_condition_behav.mat',{'K:\Cluster_paper_data\Sleep exp\3424_result_102919\active_sleep\sleep1_results\current_condition_behav.mat','K:\Cluster_paper_data\Sleep exp\3424_result_102919\active_sleep\sleep2_results\current_condition_behav.mat','K:\Cluster_paper_data\Sleep exp\3424_result_102919\active_sleep\sleep3_results\current_condition_behav.mat'};
+    'K:\Cluster_paper_data\Sleep exp\3425_result_102919\active_results\current_condition_behav.mat',{'K:\Cluster_paper_data\Sleep exp\3425_result_102919\sleep1_results\current_condition_behav.mat','K:\Cluster_paper_data\Sleep exp\3425_result_102919\sleep2_results\current_condition_behav.mat','K:\Cluster_paper_data\Sleep exp\3425_result_102919\sleep3_results\current_condition_behav.mat','K:\Cluster_paper_data\Sleep exp\3425_result_102919\sleep4_results\current_condition_behav.mat','K:\Cluster_paper_data\Sleep exp\3425_result_102919\sleep5_results\current_condition_behav.mat','K:\Cluster_paper_data\Sleep exp\3425_result_102919\sleep6_results\current_condition_behav.mat'};
+    'K:\Cluster_paper_data\Sleep exp\270_result\active_bright_Behav.mat',{'K:\Cluster_paper_data\Sleep exp\270_result\sleep_dark_Behav.mat'};
+    'K:\Cluster_paper_data\Sleep exp\2833_result\active_bright_Behav.mat',{'K:\Cluster_paper_data\Sleep exp\2833_result\sleep_dark_Behav.mat'};
 
     }
 
 behavExp={
-    'D:\Sleep exp\3422_result_102919\sleep\awake_Behav.mat','D:\Sleep exp\3422_result_102919\sleep\sleep1_Behav.mat';
-    'D:\Sleep exp\3424_result_102919\active_sleep\active_Behav.mat','D:\Sleep exp\3424_result_102919\active_sleep\sleep1_Behav.mat';
-    'D:\Sleep exp\3425_result_102919\active_Behav.mat','D:\Sleep exp\3425_result_102919\sleep6_Behav.mat';
-    'D:\Sleep exp\270_result\active_bright_Behav.mat','D:\Sleep exp\270_result\sleep_dark_Behav.mat';
-    'D:\Sleep exp\2833_result\active_bright_Behav.mat','D:\Sleep exp\2833_result\sleep_dark_Behav.mat';
+    'K:\Cluster_paper_data\Sleep exp\3422_result_102919\sleep\awake_Behav.mat','K:\Cluster_paper_data\Sleep exp\3422_result_102919\sleep\sleep1_Behav.mat';
+    'K:\Cluster_paper_data\Sleep exp\3424_result_102919\active_sleep\active_Behav.mat','K:\Cluster_paper_data\Sleep exp\3424_result_102919\active_sleep\sleep1_Behav.mat';
+    'K:\Cluster_paper_data\Sleep exp\3425_result_102919\active_Behav.mat','K:\Cluster_paper_data\Sleep exp\3425_result_102919\sleep6_Behav.mat';
+    'K:\Cluster_paper_data\Sleep exp\270_result\active_bright_Behav.mat','K:\Cluster_paper_data\Sleep exp\270_result\sleep_dark_Behav.mat';
+    'K:\Cluster_paper_data\Sleep exp\2833_result\active_bright_Behav.mat','K:\Cluster_paper_data\Sleep exp\2833_result\sleep_dark_Behav.mat';
     }
 
 
@@ -42,6 +42,7 @@ cond_idx=[
     1 2;
     1 2;];
 
+original_area_size_summary={};
 area_size_summary={};
 pcorr_summary={};
 group_summary={};
@@ -133,9 +134,14 @@ for i=1:3
         btime=btime(1:time_cut,:);
         behavpos=behavpos(1:time_cut,:);
 
-            
-        [group,CMO,Z,cophList,cophList_adjusted]=cluster_determine_by_suoqin_NMF_firstPeakCoph_stability(ntemp,100,10,[]);
-        
+        if j==1 % force sleep and awake have the same number of clusters      
+            [group,CMO,Z,cophList,cophList_adjusted]=cluster_determine_by_suoqin_NMF_firstPeakCoph_stability(ntemp,100,10,[]);
+            [~,~,original_area_size_summary{i,j}{1},~,~,~,original_area_size_summary{i,j}{2},~]=DBSCAN_region_quantify_022422(group,{ntemp},[]); % make sleep clust # the same with awake
+        else
+            [group,CMO,Z,cophList,cophList_adjusted]=cluster_determine_by_suoqin_NMF_firstPeakCoph_stability(ntemp,100,10,max(group_summary{i,1}));
+            [~,~,original_area_size_summary{i,j}{1},~,~,~,original_area_size_summary{i,j}{2},~]=DBSCAN_region_quantify_022422(group,{ntemp},[]); % make sleep clust # the same with awake
+        end
+
          colorClusters_all=distinguishable_colors(10);
          A_color=cluster_spatial_footprint_colormap({ntemp},d1,d2,colorClusters_all,group,0.7);
          
@@ -261,8 +267,8 @@ for i=1:3
          fr_summary{i,j}=mean(fr_temp);
          all_avg_region{i,j}=avg_region;
          
-         [~,~,~,~,~,~,~,intra_all{i,j},inter_all{i,j},intra_shuffle_all{i,j}]=intra_inter_cluster_corr_dis({ntemp},group2,1,'corr');
-         [~,~,~,~,~,~,~,intra_all_dis{i,j},inter_all_dis{i,j},intra_shuffle_all_dis{i,j}]=intra_inter_cluster_corr_dis({ntemp},group2,1,'dis');
+%          [~,~,~,~,~,~,~,intra_all{i,j},inter_all{i,j},intra_shuffle_all{i,j}]=intra_inter_cluster_corr_dis({ntemp},group2,1,'corr');
+%          [~,~,~,~,~,~,~,intra_all_dis{i,j},inter_all_dis{i,j},intra_shuffle_all_dis{i,j}]=intra_inter_cluster_corr_dis({ntemp},group2,1,'dis');
 
     end
 end
@@ -349,7 +355,6 @@ k3=cell2mat(intra_shuffle_all(:,2));
 intra_all_dis={};
 inter_all_dis={};
 intra_shuffle_all_dis={};
-
 for i=1:3
     for j=1:size(behav_vid,2)
         load(neuronDat{i,j});
@@ -363,9 +368,8 @@ for i=1:3
        
         thresh=3*std(ntemp.S,[],2);
         ntemp.S=thresh_nC_nS(ntemp.S,thresh);
-        [group,CMO,Z,cophList,cophList_adjusted]=cluster_determine_by_suoqin_NMF_firstPeakCoph_stability(ntemp,100,10,[]);
-        
-        [~,~,~,~,~,~,~,intra_all_dis{i,j},inter_all_dis{i,j},intra_shuffle_all_dis{i,j},~]=intra_inter_cluster_corr_dis({ntemp},group,1,'dis');
+
+        [intra_all_dis{i,j},inter_all_dis{i,j},~,~,intra_shuffle_all_dis{i,j},~]=intra_inter_cluster_corr_dis({ntemp},group_summary{i,j},1,'dis');
 
     end
 end
@@ -436,9 +440,14 @@ k3=cell2mat(intra_shuffle_all_dis(:,2));
 [h,p3]=kstest2(k2(1:50:end),k3(1:10000:end));
 
 %% region size compare, awake/sleep
-for i=1:5
-    plot(all_avg_region{i,2}-all_avg_region{i,1},'-o','color','b');
-    hold on;
-%     hold on;
-%     plot(all_avg_region{i,2}(2:end),'-o','color','g');
+awake_ori_size=[];
+awake_shuf_size=[];
+sleep_ori_size=[];
+sleep_shuf_size=[];
+
+for i=1:3
+    awake_ori_size=[awake_ori_size;original_area_size_summary{i,1}{1}];
+    awake_shuf_size=[awake_shuf_size;nanmean(original_area_size_summary{i,1}{2})];
+    sleep_ori_size=[sleep_ori_size;original_area_size_summary{i,2}{1}];
+    sleep_shuf_size=[sleep_shuf_size;nanmean(original_area_size_summary{i,2}{2})];    
 end

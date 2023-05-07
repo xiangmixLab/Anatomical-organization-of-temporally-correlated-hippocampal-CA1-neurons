@@ -194,211 +194,51 @@ end
 
 %% validation: multiGeo
 
-foldername_multiGeo={
-    'D:\Remapping_square_circle_triangle_061119_061319\M3411'	
-    'D:\Remapping_square_circle_triangle_061119_061319\M3412'	
-    'D:\Remapping_square_circle_triangle_061119_061319\M3421F'	
-    'D:\Remapping_square_circle_triangle_061119_061319\M3422F'	
-    'D:\Remapping_square_circle_triangle_061119_061319\M3424F'	
-    'D:\Remapping_square_circle_triangle_061119_061319\M3425F'	
-    }
+load('D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\cluster_optimal_num\Fig1_3_multiGeo_clust_original.mat');
+load('D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\cluster_optimal_num\Fig3_barrier_clust_original.mat')
 
-
-
-% load('AI163_clustering_ICA_kmean.mat');
-
-A_color_mGeo={};
-A_color_region_mGeo={};
-avg_region_mGeo={};
-max_region_mGeo={};
-avg_region_nnum_mGeo={};
-max_region_nnum_mGeo={};
-avg_region_shuf_mGeo={};
-max_region_shuf_mGeo={};
-avg_region_nnum_shuf_mGeo={};
-max_region_nnum_shuf_mGeo={};
-A_color_shuf_mGeo={};
-A_color_region_shuf_mGeo={};
-nd_all_mGeo={};
-
-tic;
-for i=1:6
+% multiGeo size
+multiGeo_sz=[];
+for i=1:length(foldername_multiGeo)
     load([foldername_multiGeo{i},'\','neuronIndividuals_new.mat']);
-    for j=3
-        for k=2:10
-            group_mGeo_regionNum{i,j}{k}=cluster_determine_by_suoqin_NMF_firstPeakCoph_022422(neuronIndividuals_new{j},100,10,k);
-            [A_color_mGeo{i,j}{k},A_color_region_mGeo{i,j}{k},avg_region_mGeo{i,j}{k},max_region_mGeo{i,j}{k},avg_region_nnum_mGeo{i,j}{k},max_region_nnum_mGeo{i,j}{k},avg_region_shuf_mGeo{i,j}{k},max_region_shuf_mGeo{i,j}{k},avg_region_nnum_shuf_mGeo{i,j}{k},max_region_nnum_shuf_mGeo{i,j}{k},nd_all_mGeo{i,j}(k),A_color_shuf_mGeo{i,j}{k},A_color_region_shuf_mGeo{i,j}{k}]=DBSCAN_region_quantify_022422(group_mGeo_regionNum{i,j}{k},neuronIndividuals_new,[]);
-            toc;
-        end
-    end
+    [~,~,multiGeo_sz(i,1)]=DBSCAN_region_quantify_022422(group_ori_multiGeo{i,3},neuronIndividuals_new,[]); 
 end
 
-%%%%%%%%%%%
-avg_region_cond1_mGeo_mat=[];
-for i=1:size(avg_region_mGeo,1)
-    avg_region_cond1_mGeo_mat(i,:)=cell2mat(avg_region_mGeo{i,3}); 
-end
-
-avg_region_cond1_shuf_mat=[];
-for i=1:size(avg_region_shuf_mGeo,1) 
-    shuf_region=avg_region_shuf_mGeo{i,3};
-    shuf_region_mat=[];
-    for j=1:length(shuf_region)
-        shuf_region_mat(j)=mean(shuf_region{j});
-    end
-    avg_region_cond1_mGeo_shuf_mat(i,:)=shuf_region_mat;
-end
-
-%  neuron density is smaller than the other four
-errorbar(mean(avg_region_cond1_mGeo_mat(1:4,:),1),std(avg_region_cond1_mGeo_mat(1:4,:),[],1)/(size(avg_region_cond1_mGeo_mat(1:4,:),1)^0.5))
-hold on;
-errorbar(mean(avg_region_cond1_mGeo_shuf_mat(1:4,2:end),1),std(avg_region_cond1_mGeo_shuf_mat(1:4,2:end),[],1)/(size(avg_region_cond1_mGeo_shuf_mat(1:4,2:end),1)^0.5))
-
-% current data is calculated as removing all neurons with max corr<=0.3
-max_region_cond1_mGeo_mat=[];
-for i=1:size(max_region_mGeo,1)
-    max_region_cond1_mGeo_mat(i,:)=cell2mat(max_region_mGeo{i,3});
-end
-
-max_region_cond1_mGeo_shuf_mat=[];
-for i=1:size(max_region_shuf_mGeo,1)
-    shuf_region=max_region_shuf_mGeo{i,3};
-    shuf_region_mat=[];
-    for j=1:length(shuf_region)
-        shuf_region_mat(j)=mean(shuf_region{j});
-    end
-    max_region_cond1_mGeo_shuf_mat(i,:)=shuf_region_mat;
-end
-
-errorbar(mean(max_region_cond1_mGeo_mat,1),std(max_region_cond1_mGeo_mat,[],1)/(size(max_region_cond1_mGeo_mat,1)^0.5))
-hold on;
-errorbar(mean(max_region_cond1_mGeo_shuf_mat(:,2:end),1),std(max_region_cond1_mGeo_shuf_mat(:,2:end),[],1)/(size(max_region_cond1_mGeo_shuf_mat(:,2:end),1)^0.5))
-
-% current data is calculated as removing all neurons with max corr<=0.3
-avg_region_nnum_cond1_mGeo_mat=[];
-for i=1:size(avg_region_nnum_mGeo,1)
-    avg_region_nnum_cond1_mGeo_mat(i,:)=ceil(cell2mat(avg_region_nnum_mGeo{i,3})); 
-end
-
-avg_region_nnum_cond1_mGeo_shuf_mat=[];
-for i=1:size(avg_region_nnum_shuf_mGeo,1) 
-    shuf_region_nnum=avg_region_nnum_shuf_mGeo{i,3};
-    shuf_region_nnum_mat=[];
-    for j=1:length(shuf_region)
-        shuf_region_nnum_mat(j)=mean(shuf_region_nnum{j});
-    end
-    avg_region_nnum_cond1_mGeo_shuf_mat(i,:)=ceil(shuf_region_nnum_mat);
-end
-
-%  neuron density is smaller than the other four
-errorbar(mean(avg_region_nnum_cond1_mGeo_mat(1:4,:),1),std(avg_region_nnum_cond1_mGeo_mat(1:4,:),[],1)/(size(avg_region_nnum_cond1_mGeo_mat(1:4,:),1)^0.5))
-hold on;
-errorbar(mean(avg_region_nnum_cond1_mGeo_shuf_mat(1:4,2:end),1),std(avg_region_nnum_cond1_mGeo_shuf_mat(1:4,2:end),[],1)/(size(avg_region_nnum_cond1_mGeo_shuf_mat(1:4,2:end),1)^0.5))
-
-% multiGeo illustration
-subplot(121)
-imagesc(A_color_mGeo{3,3}{5})
-subplot(122)
-imagesc(A_color_region_mGeo{3,3}{5})
-
-figure;
-ctt=1;
-for i=1:10:100
-    subplot(2,5,ctt);
-    imagesc(A_color_shuf_mGeo{3,3}{5}{i});
-    ctt=ctt+1;
-end
-
-figure;
-ctt=1;
-for i=1:10:100
-    subplot(2,5,ctt);
-    imagesc(A_color_region_shuf_mGeo{3,3}{5}{i});
-    ctt=ctt+1;
-end
-
-%% original extraction clustering analysis
-foldername={
-    'F:\052721_CA1 Vector Trace_Qiao_2021\101F\results'
-    'F:\052721_CA1 Vector Trace_Qiao_2021\102F\results'
-    'F:\052721_CA1 Vector Trace_Qiao_2021\103F\results'
-    'F:\052721_CA1 Vector Trace_Qiao_2021\840F\results'
-    'F:\052721_CA1 Vector Trace_Qiao_2021\2833F\results'
-}
-
-
-A_color={};
-A_color_region={};
-avg_region={};
-max_region={};
-avg_region_nnum={};
-max_region_nnum={};
-avg_region_shuf={};
-max_region_shuf={};
-avg_region_nnum_shuf={};
-max_region_nnum_shuf={};
-A_color_shuf={};
-A_color_region_shuf={};
-nd_all={};
-
-tic;
-for i=1:5
-    load([foldername{i},'\','neuronIndividuals_new.mat']);
-    for j=[1,2,3,4,6,7,9]
-        for k=2:10
-            group_AI163_ori_regionNum{i,j}{k}=cluster_determine_by_suoqin_NMF_firstPeakCoph_022422(neuronIndividuals_new{j},100,10,k);
-            [A_color{i,j}{k},A_color_region{i,j}{k},avg_region{i,j}{k},max_region{i,j}{k},avg_region_nnum{i,j}{k},max_region_nnum{i,j}{k},avg_region_shuf{i,j}{k},max_region_shuf{i,j}{k},avg_region_nnum_shuf{i,j}{k},max_region_nnum_shuf{i,j}{k},nd_all{i,j}(k),A_color_shuf{i,j}{k},A_color_region_shuf{i,j}{k}]=DBSCAN_region_quantify_022422(group_AI163_ori_regionNum{i,j}{k},neuronIndividuals_new,[]);
-            toc;
-        end
-    end
-end
-
-%% original extraction, optimal clusters
-load('D:\Xu_clusterting_paper_prep11_2020\Round19\figS13_panels\AI163_clustering_ICA_kmean_originalExtract_040222_cond1-9.mat');
-for i=1:5
-    foldername_AI163{i}(1:3)='F:\';
-end
-tic;
-for i=1:5
+% AI163 size
+AI163_sz=[];
+for i=1:length(foldername_AI163)
     load([foldername_AI163{i},'\','neuronIndividuals_new.mat']);
-    for j=9
-        [~,~,avg_region{i,j},max_region{i,j},avg_region_nnum{i,j},max_region_nnum{i,j},avg_region_shuf{i,j},max_region_shuf{i,j},avg_region_nnum_shuf{i,j},max_region_nnum_shuf{i,j},nd_all{i,j},A_color_shuf{i,j},A_color_region_shuf{i,j}]=DBSCAN_region_quantify_022422(group_ori_AI163{i,j},neuronIndividuals_new,[]);
-        toc;
+    for j=[1,2,3,4,6,7,9]
+        [~,~,AI163_sz(i,j)]=DBSCAN_region_quantify_022422(group_ori_AI163{i,j},neuronIndividuals_new,[]); 
     end
 end
-cond=9;
-avg_region_mat=cell2mat(avg_region(:,cond));
-avg_region_shuf_mat=[];
-for i=1:size(avg_region_shuf,1) 
-    shuf_region=avg_region_shuf{i,cond};
-    avg_region_shuf_mat(i,1)=mean(shuf_region);
-end
-%% virus experiment 1, optimal clusters
-load('D:\Xu_clusterting_paper_prep11_2020\Round19\figS13_panels\multiGeo_clustering_ICA_kmean.mat');
-cond=3;
-
-foldername_multiGeo={
-    'D:\Remapping_square_circle_triangle_061119_061319\M3411'	
-    'D:\Remapping_square_circle_triangle_061119_061319\M3412'	
-    'D:\Remapping_square_circle_triangle_061119_061319\M3421F'	
-    'D:\Remapping_square_circle_triangle_061119_061319\M3422F'	
-    'D:\Remapping_square_circle_triangle_061119_061319\M3424F'	
-    'D:\Remapping_square_circle_triangle_061119_061319\M3425F'	
-    }
-
-tic;
-for i=1:6
+AI163_sz_selected=max(AI163_sz,[],2);
+% footprint
+multiGeo_ft={};
+for i=[1,3,5]
     load([foldername_multiGeo{i},'\','neuronIndividuals_new.mat']);
-    for j=1:6
-        [~,~,avg_region{i,j},max_region{i,j},avg_region_nnum{i,j},max_region_nnum{i,j},avg_region_shuf{i,j},max_region_shuf{i,j},avg_region_nnum_shuf{i,j},max_region_nnum_shuf{i,j},nd_all{i,j},A_color_shuf{i,j},A_color_region_shuf{i,j}]=DBSCAN_region_quantify_022422(group_ori_multiGeo{i,j},neuronIndividuals_new,[]);
-        toc;
-    end
+    [multiGeo_ft{i}{1},multiGeo_ft{i}{2}]=DBSCAN_region_quantify_022422(group_ori_multiGeo{i,3},neuronIndividuals_new,[]); 
 end
 
-avg_region_mat=cell2mat(avg_region);
-avg_region_shuf_mat=[];
-for i=1:size(avg_region_shuf,1) 
-    for cond=1:size(avg_region_shuf,2) 
-        avg_region_shuf_mat(i,cond)=mean(avg_region_shuf{i,cond});
-    end
+% AI163 ft
+AI163_ft={};
+trials=[2,-1,2,-1,8];
+for i=[1,3,5]
+    load([foldername_AI163{i},'\','neuronIndividuals_new.mat']);
+    [AI163_ft{i}{1},AI163_ft{i}{2}]=DBSCAN_region_quantify_022422(group_ori_AI163{i,trials(i)},neuronIndividuals_new,[]); 
+end
+
+% illustrate
+for i=1:3
+    subplot(2,3,i)
+    imagesc(multiGeo_ft{2*i-1}{1});
+    subplot(2,3,i+3)
+    imagesc(multiGeo_ft{2*i-1}{2});
+end
+
+for i=1:3
+    subplot(2,3,i)
+    imagesc(AI163_ft{2*i-1}{1});
+    subplot(2,3,i+3)
+    imagesc(AI163_ft{2*i-1}{2});
 end

@@ -632,3 +632,22 @@ end
 
 ori_adjrand=cell2mat(adjrand_idx_val_mice');
 ori_rand=cell2mat(rand_idx_val_mice');
+
+%% panel N: cluster size at optimal distance, per mice
+load('D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\cluster_region_sz\fig1_3_multiGeo_cluster_Region_sz.mat')
+load('D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\cluster_optimal_num\Fig1_3_multiGeo_clust_original.mat')
+
+circle_sz=[];
+circle_shuf_sz=[];
+for i=1:6
+    circle_sz=[circle_sz;avg_region_multiGeo_k{i,2}{max(group_ori_multiGeo{i,2})}];
+    circle_shuf_sz=[circle_shuf_sz;nanmean(avg_region_shuf_multiGeo_k{i,2}{max(group_ori_multiGeo{i,2})})];
+end
+
+%% panel O
+circle_sz=[];
+circle_shuf_sz=[];
+for i=1:6
+    circle_sz=[circle_sz;avg_region_multiGeo_k{i,3}{max(group_ori_multiGeo{i,3})}];
+    circle_shuf_sz=[circle_shuf_sz;nanmean(avg_region_shuf_multiGeo_k{i,3}{max(group_ori_multiGeo{i,3})})];
+end
