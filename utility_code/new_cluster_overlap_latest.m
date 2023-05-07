@@ -15,7 +15,7 @@ for i=1:size(C,1)
         if C(i,j)>2
             together_pairs(i,j)=nchoosek(C(i,j),2);
         end
-        if C(i,j)<=2 && C(i,j)>0
+        if C(i,j)==2 && C(i,j)>0
             together_pairs(i,j)=1;
         end
         if C(i,j)==0
@@ -24,46 +24,23 @@ for i=1:size(C,1)
     end
 end
 
-%% total pairs of c1, pre cluster
-clust_pairs1=[];
+clust_pairs=[];
 for i=1:size(C,1)
     if sum(C(i,:))>2
-        clust_pairs1(i,1)=nchoosek(sum(C(i,:)),2);
+        clust_pairs(i,1)=nchoosek(sum(C(:,i)),2);
     end
     if sum(C(i,:))==2
-        clust_pairs1(i,1)=1;
+        clust_pairs(i,1)=1;
     end
     if sum(C(i,:))<2
-        clust_pairs1(i,1)=1; % only one element in the cluster, set as 1 to avoid divide by 0
+        clust_pairs(i,1)=1; % only one element in the cluster, set as 1 to avoid divide by 0
     end
 end
 
-%% total pairs of c2, pre cluster
-clust_pairs2=[];
-for i=1:size(C,2)
-    if sum(C(:,i))>2
-        clust_pairs2(i,1)=nchoosek(sum(C(:,i)),2);
-    end
-    if sum(C(:,i))==2
-        clust_pairs2(i,1)=1;
-    end
-    if sum(C(:,i))<2
-        clust_pairs2(i,1)=1; % only one element in the cluster, set as 1 to avoid divide by 0
-    end
-end
+overlap_idx_avgClust=mean(sum(together_pairs,1)./clust_pairs'); % overlap for each cluster, then take average
+overlap_idx=sum(together_pairs(:))/nchoosek(length(c1),2); % overlap calculated by all overlap pairs / all possible pairs
+overlap_idx_perClust=sum(together_pairs,1)./clust_pairs';
 
-%% overlap calculation
-overlap_idx_avgClust1=mean(sum(together_pairs,2)./clust_pairs1); % overlap for each cluster, then take average
-overlap_idx_total1=sum(together_pairs(:))/sum(clust_pairs1); % overlap calculated by all overlap pairs / all possible intra-clsuter pairs
-overlap_idx_perClust1=sum(together_pairs,2)./clust_pairs1;
-
-overlap_idx_avgClust2=mean(sum(together_pairs,1)./clust_pairs2'); % overlap for each cluster, then take average
-overlap_idx_total2=sum(together_pairs(:))/sum(clust_pairs2); % overlap calculated by all overlap pairs / all possible intra-clsuter pairs
-overlap_idx_perClust2=sum(together_pairs,1)./clust_pairs2';
-
-overlap_idx_avgClust=overlap_idx_avgClust1;
-overlap_idx=overlap_idx_total1;
-overlap_idx_perClust=overlap_idx_perClust1;
 
 function Cont=Contingency(Mem1,Mem2)
 
