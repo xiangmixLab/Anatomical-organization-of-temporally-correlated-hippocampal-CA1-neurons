@@ -8,4 +8,4 @@ Code repository for the publication "Anatomical organization of temporally corre
   - cluster_calculation_wrapper: wrapper functions of the clustering codes used in cluster_data_prepare
 
 
-Some of the codes are still under arrangement. Will indicate here when finished
+Main figure codes are ready. Supplemental figure codes are still under arrangement. Will indicate here when finished
