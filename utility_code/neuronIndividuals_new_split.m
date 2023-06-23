@@ -1,17 +1,17 @@
-function neuronIndividuals=neuronIndividuals_new_split(neuron,frames)
+function neuronIndividuals=neuronIndividuals_new_split(neuron,frames,interval)
 
 startt=1;
 startt1=1;
 neuronIndividuals={};
-for i=1:2*floor(size(neuron.C,2)/frames)-1
-    neuronIndividuals{i}=neuron;
-    neuronIndividuals{i}.C=neuronIndividuals{i}.C(:,startt:startt+frames-1);
-    neuronIndividuals{i}.S=neuronIndividuals{i}.S(:,startt:startt+frames-1);
+for i=1:floor((size(neuron.C,2)-frames)/interval)+1
+    neuronIndividuals{i}.C=neuron.C(:,startt:min(startt+interval,size(neuron.C,2)));
+    neuronIndividuals{i}.S=neuron.S(:,startt:min(startt+interval,size(neuron.C,2)));
     neuronIndividuals{i}.C_df=[];
     neuronIndividuals{i}.trace=[];
-    neuronIndividuals{i}.C_raw=neuronIndividuals{i}.C_raw(:,startt:startt+frames-1);
-    neuronIndividuals{i}.time=neuronIndividuals{i}.time(startt1:startt1+2*frames-1);
-
-    startt=startt+frames/2;
-    startt1=startt1+2*frames/2;
+    neuronIndividuals{i}.C_raw=neuron.C_raw(:,startt:min(startt+interval,size(neuron.C,2)));
+    neuronIndividuals{i}.time=neuron.time(startt1:min(startt1+interval*2,length(neuron.time)));
+    
+    disp(num2str([startt,startt+interval]))
+    startt=startt+round(interval);
+    startt1=startt1+round(2*interval);
 end
