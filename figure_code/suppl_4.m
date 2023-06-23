@@ -1,36 +1,27 @@
-%% PC distribution
+%% supplemental Figure 4: PC distribution
+load(['D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\cluster_optimal_num\Fig1_3_multiGeo_clust_original.mat'])
 
 %% 1.PC calculation
-load('D:\LJ_qualification_proposal_012621\codes\aim3a_group_ori_multiGeo1.mat');
-load('D:\LJ_qualification_proposal_012621\codes\aim3a_neuron_multiGeo.mat');
-
 binsize=10;
-fname={
-'D:\Remapping_square_circle_triangle_061119_061319\M3411\neuronIndividuals_new.mat'		
-'D:\Remapping_square_circle_triangle_061119_061319\M3412\neuronIndividuals_new.mat'		
-'D:\Remapping_square_circle_triangle_061119_061319\M3421F\neuronIndividuals_new.mat'		
-'D:\Remapping_square_circle_triangle_061119_061319\M3422F\neuronIndividuals_new.mat'		
-'D:\Remapping_square_circle_triangle_061119_061319\M3424F\neuronIndividuals_new.mat'		
-'D:\Remapping_square_circle_triangle_061119_061319\M3425F\neuronIndividuals_new.mat'		
-};
-for i=1:length(fname)
-    fldname{i}=fileparts(fname{i});
-end
-behavname={
-    'triangle1_Behav.mat';
-    'circle1_Behav.mat';   
-    'square1_Behav.mat';   
-    'circle2_Behav.mat';   
-    'square2_Behav.mat';  
-    'triangle2_Behav.mat';
-}
 
+fldname={
+    'D:\Xu_clusterting_paper_prep11_2020\arranged_final_data\Fig_1_3_tri_cir_sqr\M3411'		
+    'D:\Xu_clusterting_paper_prep11_2020\arranged_final_data\Fig_1_3_tri_cir_sqr\M3412'		
+    'D:\Xu_clusterting_paper_prep11_2020\arranged_final_data\Fig_1_3_tri_cir_sqr\M3421F'		
+    'D:\Xu_clusterting_paper_prep11_2020\arranged_final_data\Fig_1_3_tri_cir_sqr\M3422F'		
+    'D:\Xu_clusterting_paper_prep11_2020\arranged_final_data\Fig_1_3_tri_cir_sqr\M3424F'		
+    'D:\Xu_clusterting_paper_prep11_2020\arranged_final_data\Fig_1_3_tri_cir_sqr\M3425F'		
+};
+
+nnew_all={};
 all_behav={};
 for i=1:length(fldname)
-    for j=1:length(behavname)
-        load([fldname{i},'\',behavname{j}]);
-        all_behav{i,j}=behav;
+    load([fldname{i},'\','neuronIndividuals_new.mat']);
+    load([fldname{i},'\','behav.mat']);
+    for j=1:length(neuronIndividuals_new)
+        all_behav{i,j}=behavIndividuals{j};
         all_behav{i,j}.VidObj=[];
+        nnew_all{i}=neuronIndividuals_new;
     end
 end
 
@@ -60,10 +51,11 @@ colorClusters_all=distinguishable_colors(11);
 colorClusters_all(11,:)=[0.75,0.75,0.75];
 for j=1:length(nnew_all)
     for j1=2
+        nnew_all{j}{j1}.imageSize=[240,376];
         nnew_all{j}{j1}.centroid=neuron_centroid_calculation(nnew_all{j}{j1},nnew_all{j}{j1}.imageSize);
-        [A_color{j,j1},A_color_region{j,j1}]=DBSCAN_region_quantify_func_single_group_no_plot(group_ori{j}{j1},{nnew_all{j}{j1}},[],'miniscope');
+        [A_color{j,j1},A_color_region{j,j1}]=DBSCAN_region_quantify_022422(group_ori_multiGeo{j,j1},nnew_all{j},[]);
         
-        gp1=group_ori{j}{j1};
+        gp1=group_ori_multiGeo{j,j1};
         gp1(~ismember(1:length(gp1),all_pc{j,2}{2}))=11;
         A_color_pc{j,j1}=cluster_spatial_footprint_colormap({nnew_all{j}{j1}},240,376,colorClusters_all,gp1,0.7);
 
@@ -71,24 +63,7 @@ for j=1:length(nnew_all)
 end
 
 midx=[1:6];
-figure;
-ctt=1;
-for j=midx
-    for j1=2
-        subplot(6,2,j1+(ctt-1)*2);
-        imagesc(A_color{j,j1});    
-    end
-    ctt=ctt+1;
-end
-figure;
-ctt=1;
-for j=midx
-    for j1=2
-        subplot(6,2,j1+(ctt-1)*2);
-        imagesc(A_color_region{j,j1});
-    end
-    ctt=ctt+1;
-end
+
 figure;
 ctt=1;
 for j=midx
@@ -102,19 +77,23 @@ end
 %% 3. pairwise distance
 
 for tk=1:6
-    [~,~,~,~,~,~,~,intra_all{tk},inter_all{tk},intra_shuffle_all{tk}]=intra_inter_cluster_corr_dis({nnew_all{tk}{2}},group_ori{tk}{2},1,'dis');
+    [~,~,~,~,~,~,~,intra_all{tk},inter_all{tk},intra_shuffle_all{tk}]=intra_inter_cluster_corr_dis({nnew_all{tk}{2}},group_ori_multiGeo{j,2},1,'dis');
     
     pc_idx=all_pc{tk,2}{2};
     del_idx=find(~ismember(1:size(nnew_all{tk}{2}.C,1),pc_idx)==1);
     
-    npc=nnew_all{tk}{2}.copy;
-    npc.delete(del_idx);
-    gppc=group_ori{tk}{2};
+    npc=nnew_all{tk}{2};
+    npc.C(del_idx,:)=[];
+    npc.C_raw(del_idx,:)=[];
+    npc.S(del_idx,:)=[];
+    npc.A(:,del_idx)=[];
+    npc.centroid(del_idx,:)=[];
+    gppc=group_ori_multiGeo{tk,2};
     gppc=gppc(pc_idx);
     
     [~,~,~,~,~,~,~,intra_all_pc{tk}]=intra_inter_cluster_corr_dis({npc},gppc,1,'dis');
     [~,~,~,~,~,~,~,intra_all_pc_all{tk}]=intra_inter_cluster_corr_dis({npc},double(gppc>0),1,'dis');
-    [dis_all{tk}]=intra_inter_cluster_corr_dis({nnew_all{tk}{2}},double(group_ori{tk}{2}>0),1,'dis');
+    [dis_all{tk}]=intra_inter_cluster_corr_dis({nnew_all{tk}{2}},double(group_ori_multiGeo{tk,2}>0),1,'dis');
 
 end
 
@@ -131,21 +110,17 @@ h1=cdfplot(cell2mat(intra_all'));
 hold on;
 h2=cdfplot(cell2mat(intra_all_pc'));
 h3=cdfplot(cell2mat(intra_all_pc_all'));
-h4=cdfplot(cell2mat(dis_all'));
 set(h1,'color',colorClusters_all(4,:));
 set(h2,'color',colorClusters_all(5,:));
 set(h3,'color',colorClusters_all(6,:));
-set(h4,'color',colorClusters_all(7,:));
 
 p1=infer_cdf_loc(cell2mat(intra_all'),nanmean(cell2mat(intra_all')));
 p2=infer_cdf_loc(cell2mat(intra_all_pc'),nanmean(cell2mat(intra_all_pc')));
 p3=infer_cdf_loc(cell2mat(intra_all_pc_all'),nanmean(cell2mat(intra_all_pc_all')));
-p4=infer_cdf_loc(cell2mat(dis_all'),nanmean(cell2mat(dis_all')));
 
 plot(p1(1),p1(2),'.','color',colorClusters_all(4,:),'MarkerSize',20)
 plot(p2(1),p2(2),'.','color',colorClusters_all(5,:),'MarkerSize',20)
 plot(p3(1),p3(2),'.','color',colorClusters_all(6,:),'MarkerSize',20)
-plot(p4(1),p4(2),'.','color',colorClusters_all(7,:),'MarkerSize',20)
 
 k1=cell2mat(intra_all');
 k2=cell2mat(intra_all_pc');
@@ -169,19 +144,23 @@ mean(cell2mat(dis_all')*2)
 
 %% 4. pairwise CORR
 for tk=1:6
-    [~,~,~,~,~,~,~,intra_all{tk},inter_all{tk},intra_shuffle_all{tk}]=intra_inter_cluster_corr_dis({nnew_all{tk}{2}},group_ori{tk}{2},1,'corr');
+    [~,~,~,~,~,~,~,intra_all{tk},inter_all{tk},intra_shuffle_all{tk}]=intra_inter_cluster_corr_dis({nnew_all{tk}{2}},group_ori_multiGeo{tk,2},1,'corr');
     
     pc_idx=all_pc{tk,2}{2};
     del_idx=find(~ismember(1:size(nnew_all{tk}{2}.C,1),pc_idx)==1);
     
-    npc=nnew_all{tk}{2}.copy;
-    npc.delete(del_idx);
-    gppc=group_ori{tk}{2};
+    npc=nnew_all{tk}{2};
+    npc.C(del_idx,:)=[];
+    npc.C_raw(del_idx,:)=[];
+    npc.S(del_idx,:)=[];
+    npc.A(:,del_idx)=[];
+    npc.centroid(del_idx,:)=[];
+    gppc=group_ori_multiGeo{tk,2};
     gppc=gppc(pc_idx);
     
     [~,~,~,~,~,~,~,intra_all_pc{tk}]=intra_inter_cluster_corr_dis({npc},gppc,1,'corr');
     [~,~,~,~,~,~,~,intra_all_pc_all{tk}]=intra_inter_cluster_corr_dis({npc},double(gppc>0),1,'corr');
-    [corr_all{tk}]=intra_inter_cluster_corr_dis({nnew_all{tk}{2}},double(group_ori{tk}{2}>0),1,'corr');
+    [corr_all{tk}]=intra_inter_cluster_corr_dis({nnew_all{tk}{2}},double(group_ori_multiGeo{tk,2}>0),1,'corr');
 end
 
 % intra_all,intra_pc,all_pc
@@ -229,5 +208,3 @@ sem(k2,1)
 mean(k3)
 sem(k3,1)
 
-%% 5: infoscore
-% empty
