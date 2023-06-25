@@ -1,21 +1,19 @@
 %% supplemental Fig.7: segregation analysis
+run('D:\Xu_clusterting_paper_prep11_2020\final_code\data_prepare\neuron_data_info.m')
+all_colors=distinguishable_colors(10);
+load(['D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\cluster_optimal_num\Fig2_cir_rec_clust_original.mat'])
+
 %% data prepare for following analysis
 %cluster
-group_dat={};
-for i=1:length(foldername)
-    load([foldername{i},'\','square_placement_cell_cluster','\','variables_clustering_0.35PC.mat']);
-    group_dat{i,1}=group{1};
-    load([foldername{i},'\','circle_placement_cell_cluster','\','variables_clustering_0.35PC.mat']);
-    group_dat{i,2}=group{2};
-end
+group_dat=group_ori_fig2;
+foldername=foldername_fig2;
 
 % behav
 all_behav={};
 for i=1:length(foldername)
-    load([foldername{i},'\','square_Behav.mat']);
-    all_behav{i,1}=behav;
-    load([foldername{i},'\','circle_Behav.mat']);
-    all_behav{i,2}=behav;
+    load([foldername{i},'\','Behav.mat']);
+    all_behav{i,1}=behavIndividuals{1};
+    all_behav{i,2}=behavIndividuals{2};
 end
 
 % ensemble firing
@@ -25,58 +23,34 @@ n_gp_ensem={};
 overlap_idx1={};
 for tk=1:12
     load([foldername{tk},'\','neuronIndividuals_new.mat'])
-    n_gp_ensem{tk,1}=Sources2D;
-    n_gp_ensem{tk,2}=Sources2D;
-    nnew_all{tk,1}=neuronIndividuals_new{1}.copy;
-    nnew_all{tk,2}=neuronIndividuals_new{2}.copy;
-    for i=1:length(unique(group_dat{tk,1}))
-        n_gp{tk,1}{i}=neuronIndividuals_new{1}.copy;
-        del_idx=find(group_dat{tk,1}~=i>0);
-        n_gp{tk,1}{i}.delete(del_idx);
-        
-        n_gp1_C=n_gp{tk,1}{i}.C;
-        n_gp1_S=C_to_peakS(n_gp1_C);
-        n_gp1_C_ensem=nanmean(zscore(n_gp1_C,[],2),1);
-        n_gp1_C_ensem(n_gp1_C_ensem<0)=0;
-        n_gp1_S_ensem=C_to_peakS(n_gp1_C_ensem);
-
-        n_gp_ensem{tk,1}.A=n_gp{tk,1}{i}.A;
-        n_gp_ensem{tk,1}.C(i,:)=n_gp1_C_ensem;
-        n_gp_ensem{tk,1}.C_raw(i,:)=n_gp1_C_ensem;
-        n_gp_ensem{tk,1}.S(i,:)=n_gp1_S_ensem;
-        n_gp_ensem{tk,1}.time=n_gp{tk,1}{i}.time;
-        
-    end
-    for i=1:length(unique(group_dat{tk,2}))
-        n_gp{tk,2}{i}=neuronIndividuals_new{2}.copy;
-        del_idx=find(group_dat{tk,2}~=i>0);
-        n_gp{tk,2}{i}.delete(del_idx);
-        
-        n_gp1_C=n_gp{tk,2}{i}.C;
-        n_gp1_S=C_to_peakS(n_gp1_C);
-        n_gp1_C_ensem=nanmean(zscore(n_gp1_C,[],2),1);
-        n_gp1_C_ensem(n_gp1_C_ensem<0)=0;
-        n_gp1_S_ensem=C_to_peakS(n_gp1_C_ensem);
-       
-        n_gp_ensem{tk,2}.A=n_gp{tk,2}{i}.A;
-        n_gp_ensem{tk,2}.C(i,:)=n_gp1_C_ensem;
-        n_gp_ensem{tk,2}.C_raw(i,:)=n_gp1_C_ensem;
-        n_gp_ensem{tk,2}.S(i,:)=n_gp1_S_ensem;
-        n_gp_ensem{tk,2}.time=n_gp{tk,2}{i}.time;
+    for l=1:2
+        for i=1:length(unique(group_dat{tk,l}))
+            n_gp{tk,l}{i}=current_gp_neuron(neuronIndividuals_new{1},group_dat{tk,l},i);
+            
+            n_gp1_C=n_gp{tk,l}{i}.C;
+            n_gp1_S=C_to_peakS(n_gp1_C);
+            n_gp1_C_ensem=nanmean(zscore(n_gp1_C,[],2),1);
+            n_gp1_C_ensem(n_gp1_C_ensem<0)=0;
+            n_gp1_S_ensem=C_to_peakS(n_gp1_C_ensem);
+    
+            n_gp_ensem{tk,l}.A=n_gp{tk,l}{i}.A;
+            n_gp_ensem{tk,l}.C(i,:)=n_gp1_C_ensem;
+            n_gp_ensem{tk,l}.C_raw(i,:)=n_gp1_C_ensem;
+            n_gp_ensem{tk,l}.S(i,:)=n_gp1_S_ensem;
+            n_gp_ensem{tk,l}.time=n_gp{tk,l}{i}.time;
+            
+        end
     end
 end
 
 % ensemble rate map
-
+binsize=10;
 firingrateAll_ensem_all={};
 countTime_ensem_all={};
 for i=1:size(group_dat,1)
     for j=1:size(group_dat,2)
         uni_group=unique(group_dat{i,j});
         pct=1;
-
-%         nnew_all{i}{j}.S=C_to_peakS(nnew_all{i}{j}.C);
-%         [firingrateAll,~,~,countTime] = calculatingCellSpatialForSingleData_040321(nnew_all{i}{j},all_behav{i,j}.position,all_behav{i,j}.time,all_behav{i,j}.ROI,binsize,1:size(nnew_all{i}{j}.C,1),2*std(nnew_all{i}{j}.C,[],2),'S',[],[],[0 inf],15);
         [firingrateAll_ensem,~,~,countTime_ensem] = calculatingCellSpatialForSingleData_040321(n_gp_ensem{i,j},all_behav{i,j}.position,all_behav{i,j}.time,[0,0,max(all_behav{i,j}.position,[],1)],binsize,1:size(n_gp_ensem{i,j}.C,1),3*std(n_gp_ensem{i,j}.C,[],2),'S',[],[],[0 inf],10);
      
         firingrateAll_ensem_all{i,j}=firingrateAll_ensem;
