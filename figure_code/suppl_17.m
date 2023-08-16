@@ -3,45 +3,10 @@
 %% we use linear track and Ai163 datasets to try out
 
 %% 0. file pathes (neuron videos)
-multigeo_data_path={
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3411';		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3412';		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3421F';		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3422F';		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3424F';		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3425F';		
-}
-
-cir_rec_data_path={
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3411';	
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3412';
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3413';		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3414';
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3415';		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3421F';
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3422F';		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3423F';	
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3424F';		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3425F';	
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3426F';		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3427F';			
-}
-
-linearTrack_data_path={
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_linear_track\M3411'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_linear_track\M3412'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_linear_track\M3421F'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_linear_track\M3422F'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_linear_track\M3424F'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_linear_track\M3425F'		
-}
-barrier_data_path={
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_barrier\101F'	
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_barrier\102F'	
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_barrier\103F'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_barrier\2833M'	
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_barrier\840F'		
-}
+multigeo_data_path=foldername_multiGeo
+cir_rec_data_path=foldername_fig2;
+linearTrack_data_path=foldername_LT;
+barrier_data_path=foldername_AI163;
 
 %% 1. generate .h5 files
 suppl17_h5_gen(linearTrack_data_path);
@@ -59,7 +24,7 @@ suppl17_mask_gen(cir_rec_data_path)
 % the paper indicate for one-photon vid, the algorithm use cleaned CNMF-E
 % mask and generated unmixed traces for each detected area
 
-% handled in TUnCaT python code
+% handled in TUnCaT python code, https://github.com/YijunBao/TUnCaT
 
 %% 4. generate new neuronIndividuals_new
 suppl17_CNMFE_style_data_generation(linearTrack_data_path)
@@ -67,6 +32,7 @@ suppl17_CNMFE_style_data_generation(barrier_data_path)
 suppl17_CNMFE_style_data_generation(multigeo_data_path)
 suppl17_CNMFE_style_data_generation(cir_rec_data_path)
 
+%%%%%%%%%%%%%%%%%%%%%%%%% figure analysis is focused on linear track %%%%%
 %% 4.1 check TUnCaT quality: exclude badly detected neurons 
 preserve_idxs=exclude_neurons_by_temporal(linearTrack_data_path);
 

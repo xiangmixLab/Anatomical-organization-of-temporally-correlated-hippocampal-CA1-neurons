@@ -1,75 +1,9 @@
 % number of fields of cells
 foldername_all={
-    {
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3411'	
-    'D:\\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3412'	
-    'D:\\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3421F'	
-    'D:\\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3422F'	
-    'D:\\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3424F'	
-    'D:\\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3425F'	
-    };
-    {
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3411'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3412'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3413'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3414'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3415'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3421F'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3422F'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3423F'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3424F'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3425F'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3426F'		
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_2_cir_rec\M3427F'		
-    };
-
-    {
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_barrier\101F'
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_barrier\102F'
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_barrier\103F'
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_barrier\840F'
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_barrier\2833M'
-    };
-
-    {
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_linear_track\M3411'
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_linear_track\M3412'
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_linear_track\M3421F'
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_linear_track\M3422F'
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_linear_track\M3424F'
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_3_linear_track\M3425F'
-    }
-    }
-
-behavName_all={
-    {
-    'triangle1_Behav.mat';
-    'circle1_Behav.mat';
-    'square1_Behav.mat';   
-    'circle2_Behav.mat';
-    'square2_Behav.mat';   
-    'triangle2_Behav.mat';
-    };
-
-    {
-    'square_Behav.mat';
-    'circle_Behav.mat';
-    };
-
-    {
-    'training_precue_Behav.mat'		
-    'training_cue_Behav.mat'		
-    'training_postcue_Behav.mat'	
-    'barrier_precue_Behav.mat'
-    'barrier_cue_Behav.mat'		
-    'barrier_postcue_Behav.mat'		
-    };
-
-    {
-    'Horizontal1_Behav.mat';
-    'Horizontal2_Behav.mat'; 
-    'Vertical_Behav.mat'; 
-    }
+    foldername_multiGeo;
+    foldername_fig2;
+    foldername_AI163;
+    foldername_LT;
     }
 
 cond={
@@ -86,18 +20,18 @@ for i=1:length(foldername_all)
     for j=1:length(foldername_all{i})
         load([foldername_all{i}{j},'\','neuronIndividuals_new.mat'])
         for k=cond{i}
-            load([foldername_all{i}{j},'\',behavName_all{i}{k}]);
+            load([foldername_all{i}{j},'\','behav.mat']);
             
-            neuron=neuronIndividuals_new{k}.copy;
+            neuron=neuronIndividuals_new{k};
+            behav=behavIndividuals{k};
             behavpos=behav.position;
             behavtime=behav.time;
-            maxbehavROI=behav.ROI;
             binsize=10;
             thresh=3*std(C_to_peakS(neuron.C),[],2);
             countTimeThresh=[0 inf];
             small_velo=10;
 
-            [firingrateAll{i}{j,k},countAll,~,countTime{i}{j,k},~,~,bininfo,cpt] = calculatingCellSpatialForSingleData_040321(neuron,behavpos,behavtime,maxbehavROI,binsize,1:size(neuron.C,1),thresh,'S',[],[],countTimeThresh,small_velo);
+            [firingrateAll{i}{j,k},countAll,~,countTime{i}{j,k},~,~,bininfo,cpt] = calculatingCellSpatialForSingleData_040321(neuron,behavpos,behavtime,[0,0,max(behavpos,[],1)],binsize,1:size(neuron.C,1),thresh,'S',[],[],countTimeThresh,small_velo);
             
             numFields=field_number_calculation(firingrateAll{i}{j,k});
 
@@ -138,31 +72,3 @@ subplot(144)
 bar(dat41);hold on;
 disp(num2str(dat41./sum(dat41)))
 
-%% illustration: cells with different num of fields
-all_dat={dat1,dat2,dat3,dat4}
-for i=1:4
-    totalNum=max(all_dat{i});
-    figure;
-    for p=1:totalNum
-        
-        idx=[];
-        for k1=1:size(all_field_nums{i},1)
-            for k2=1:size(all_field_nums{i},2)
-                if ~isempty(find(all_field_nums{i}{k1,k2}==p))
-                    idx1=find(all_field_nums{i}{k1,k2}==p);
-                    idx=[k1,k2,idx1(1)];
-                end
-            end
-        end
-        
-        subplot(ceil(totalNum/2),2,p);
-        [bx2,by2]=boundary_from_binImg(firingrateAll{i}{idx(1),idx(2)}{idx(3)},0.5,1);
-        ratemap_plot(firingrateAll{i}{idx(1),idx(2)}{idx(3)},countTime{i}{idx(1),idx(2)},1,0,[]);hold on; 
-        for l=1:length(bx2)
-            plot(bx2{l},by2{l},'--','color','k'); 
-        end
-    end
-    set(gcf,'renderer','painters');
-end
-
-        
