@@ -1,14 +1,6 @@
 % SUPPL 18: lap-by-lap stability for linear track experiment
 
-foldername={
-    'D:\Remapping_linear_track_053019_053119\result_merge\M3411'
-    'D:\Remapping_linear_track_053019_053119\result_merge\M3412'
-    'D:\Remapping_linear_track_053019_053119\result_merge\M3421F'
-    'D:\Remapping_linear_track_053019_053119\result_merge\M3422F'
-    'D:\Remapping_linear_track_053019_053119\result_merge\M3424F'
-    'D:\Remapping_linear_track_053019_053119\result_merge\M3425F'
-    }
-
+foldername=foldername_LT;
 %% 1. lap-by-lap calculation
 for i=1:length(foldername)
     neuronName=[foldername{i},'\','neuronIndividuals_new.mat'];
@@ -66,77 +58,39 @@ for i=1:6
     end
 end
 
-%% lap-lap corr, pc
-load('D:\Xu_clusterting_paper_prep11_2020\Round20\figS18_PANELS\PC.mat');
-meanCorrOdd_PC={};
-meanCorrEven_PC={};
-meanCorr_PC={};
 
-for i=1:6
-    for j=1:3
-        
-        cellIdx=all_pc{i,j}{2};
-        
-        for k=1:length(cellIdx)
-            lap_ratemap{i,j}{k,1}=track_lap_ratemap_by_cell(fr_all{i,j},cellIdx(k));
-            
-            corrVal1=corrcoef(lap_ratemap{i,j}{k,1}{1}');
-%             for p=1:size(corrVal1,1)
-%                 corrVal1(p,p)= nan;
-%             end
-            
-            meanCorrOdd_PC{i,j}(k,1)=mean(corrVal1(:),'omitnan');
-            
-            corrVal2=corrcoef(lap_ratemap{i,j}{k,1}{2}');
-%             for p=1:size(corrVal2,1)
-%                 corrVal2(p,p)= nan;
-%             end
-            
-            meanCorrEven_PC{i,j}(k,1)=mean(corrVal2(:),'omitnan');
-        end
-        meanCorr_PC{i,j}=max([meanCorrOdd_PC{i,j},meanCorrEven_PC{i,j}],[],2);
-    end
-end
-
-%% lap-lap corr, lap pc
-load('D:\Xu_clusterting_paper_prep11_2020\Round20\figS18_PANELS\pc_laps_avg.mat');
-meanCorrOdd_PC_lap={};
-meanCorrEven_PC_lap={};
-meanCorr_PC_lap={};
-lap_ratemap_pc={};
-
-for i=1:6
-    for j=1:3
-        
-        cellIdx=all_pc_laps_avg{i,j}{2};
-        
-        if ~isempty(cellIdx)
-            for k=1:length(cellIdx)
-                lap_ratemap_pc{i,j}{k,1}=track_lap_ratemap_by_cell(fr_all{i,j},cellIdx(k));
-
-                corrVal1=corrcoef(lap_ratemap_pc{i,j}{k,1}{1}');
-%                 for p=1:size(corrVal1,1)
-%                     corrVal1(p,p)= nan;
-%                 end
-
-                meanCorrOdd_PC_lap{i,j}(k,1)=mean(corrVal1(:),'omitnan');
-
-                corrVal2=corrcoef(lap_ratemap_pc{i,j}{k,1}{2}');
-%                 for p=1:size(corrVal2,1)
-%                     corrVal2(p,p)= nan;
-%                 end
-
-                meanCorrEven_PC_lap{i,j}(k,1)=mean(corrVal2(:),'omitnan');
-            end
-            meanCorr_PC_lap{i,j}=max([meanCorrOdd_PC_lap{i,j},meanCorrEven_PC_lap{i,j}],[],2);
-        else
-            meanCorr_PC_lap{i,j}=[];
-        end
-    end
-end
 
 %% lap-lap corr, pc-z
-load('D:\Xu_clusterting_paper_prep11_2020\Round20\figS18_PANELS\pc_z.mat');
+% calculate pc
+all_behav={};
+for i=1:length(foldername)
+    load([foldername{i},'\','behav.mat']);
+    for j=1:size(behavIndividuals,2) 
+        all_behav{i,j}=behavIndividuals{j};
+        all_behav{i,j}.VidObj=[];
+    end
+end
+
+all_pc_z=cell(6,3);
+all_infoscore_z=cell(6,3);
+all_infoscore_norm_z=cell(6,3);
+all_coherence_z=cell(6,3);
+tic;
+for i=1:6
+    load([foldername{i},'\','neuronIndividuals_new.mat']);
+    for j=1:3
+    
+        [place_cells,infoScore,infoScore_norm,coherencee] = permutingSpike_adapt_041222_LT(neuronIndividuals_new{j},all_behav{i,j}.position,all_behav{i,j}.time,'S',0,10,5,'all',0.4);  
+
+        all_pc_z{i,j}=place_cells;
+        all_infoscore_z{i,j}=infoScore;
+        all_infoscore_norm_z{i,j}=infoScore_norm;
+        all_coherence_z{i,j}=coherencee;
+
+    end
+end
+
+% pc-z ratemaps
 meanCorrOdd_PCz={};
 meanCorrEven_PCz={};
 meanCorr_PCz={};
@@ -150,17 +104,10 @@ for i=1:6
             lap_ratemap{i,j}{k,1}=track_lap_ratemap_by_cell(fr_all{i,j},cellIdx(k));
             
             corrVal1=corrcoef(lap_ratemap{i,j}{k,1}{1}');
-%             for p=1:size(corrVal1,1)
-%                 corrVal1(p,p)= nan;
-%             end
-            
+
             meanCorrOdd_PCz{i,j}(k,1)=mean(corrVal1(:),'omitnan');
             
             corrVal2=corrcoef(lap_ratemap{i,j}{k,1}{2}');
-%             for p=1:size(corrVal2,1)
-%                 corrVal2(p,p)= nan;
-%             end
-            
             meanCorrEven_PCz{i,j}(k,1)=mean(corrVal2(:),'omitnan');
         end
         meanCorr_PCz{i,j}=max([meanCorrOdd_PCz{i,j},meanCorrEven_PCz{i,j}],[],2);
