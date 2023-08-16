@@ -4,15 +4,15 @@ Fs=15;
 
 % multiGeo
 foldername_multiGeo={
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3411'	
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3412'	
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3421F'	
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3422F'	
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3424F'	
-    'D:\Xu_clusterting_paper_prep11_2020\final data\final_neuron_behav_data\Fig_1_3_tri_cir_sqr\M3425F'	
+    'D:\Xu_clusterting_paper_prep11_2020\arranged_final_data\Fig_1_3_tri_cir_sqr\M3411'	
+    'D:\Xu_clusterting_paper_prep11_2020\arranged_final_data\Fig_1_3_tri_cir_sqr\M3412'	
+    'D:\Xu_clusterting_paper_prep11_2020\arranged_final_data\Fig_1_3_tri_cir_sqr\M3421F'	
+    'D:\Xu_clusterting_paper_prep11_2020\arranged_final_data\Fig_1_3_tri_cir_sqr\M3422F'	
+    'D:\Xu_clusterting_paper_prep11_2020\arranged_final_data\Fig_1_3_tri_cir_sqr\M3424F'	
+    'D:\Xu_clusterting_paper_prep11_2020\arranged_final_data\Fig_1_3_tri_cir_sqr\M3425F'	
     }
 
-load('D:\Xu_clusterting_paper_prep11_2020\final data\final_cluster_data\Fig1_3_multiGeo_clust_original.mat')
+load('D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\cluster_optimal_num\Fig1_3_multiGeo_clust_original.mat')
 
 [all_corr_intra_multiGeo,all_corr_intra_border_multiGeo,all_corr_inter_border_multiGeo]=cluster_crossCorr2_border(group_ori_multiGeo,foldername_multiGeo)            
 
@@ -49,7 +49,7 @@ load('D:\Xu_clusterting_paper_prep11_2020\final data\final_cluster_data\Fig3_bar
 
 %% 3. illustration
 % multiGeo
-load('D:\Xu_clusterting_paper_prep11_2020\final data\final_cluster_data\Fig1_3_multiGeo_clust_original.mat')
+load('D:\Xu_clusterting_paper_prep11_2020\final_code\final_cluster_data\cluster_optimal_num\Fig1_3_multiGeo_clust_original.mat')
 cluster_crossCorr_illustration2(group_ori_multiGeo,foldername_multiGeo,1,1,1,1,2)
 cluster_crossCorr_trace_illustration(group_ori_multiGeo,foldername_multiGeo,1,1)
 
@@ -86,6 +86,11 @@ plot(p2(1),p2(2),'.','color',colorClusters_all(5,:),'MarkerSize',20)
 plot(p3(1),p3(2),'.','color',colorClusters_all(6,:),'MarkerSize',20)
 
 [v,p]=intra_inter_statistic({all_corr_intra_multiGeo(:,3),all_corr_intra_border_multiGeo(:,3),all_corr_inter_border_multiGeo(:,3)},{'intra-cluster','border intra-cluster','border inter-cluster'});
+
+% multiGeo, per mice ver
+[avg_corr_mice_intra_multiGeo]=corr_border_processing_perMice(all_corr_intra_multiGeo(:,3));
+[avg_corr_mice_intra_border_multiGeo]=corr_border_processing_perMice(all_corr_intra_border_multiGeo(:,3));
+[avg_corr_mice_inter_border_multiGeo]=corr_border_processing_perMice(all_corr_inter_border_multiGeo(:,3));
 
 % fig2
 
