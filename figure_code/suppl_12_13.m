@@ -1,10 +1,42 @@
-% suppl 12-13: place cells
+% suppl 12-13: place cells, 
+run('D:\Xu_clusterting_paper_prep11_2020\final_code\data_prepare\neuron_data_info.m')
 
-load('D:\Xu_clusterting_paper_prep11_2020\Round21\figS15_panels\placeCel_info.mat');
-load('D:\Xu_clusterting_paper_prep11_2020\Round21\figS13_panels\fig2_clustering_ICA_kmean.mat')
+%% 1. place cell calculation
+foldername=foldername_fig2;
 
-cond=1;
-resample_factor=[2,1,1]
+all_behav={};
+for i=1:length(foldername)
+    load([foldername{i},'\','behav.mat']);
+    for j=1:size(behavIndividuals,2) 
+        all_behav{i,j}=behavIndividuals{j};
+        all_behav{i,j}.VidObj=[];
+    end
+end
+
+% PC
+all_pc=cell(12,2);
+all_infoscore=cell(12,2);
+all_infoscore_norm=cell(12,2);
+all_coherence=cell(12,2);
+tic;
+for i=1:12
+    load([foldername{i},'\','neuronIndividuals_new.mat']);
+    for j=1:2
+    
+        [place_cells,infoScore,infoScore_norm,coherencee] = permutingSpike_adapt_040821(neuronIndividuals_new{j},all_behav{i,j}.position,all_behav{i,j}.time,'S',0,10,5,'all',0.4);  
+
+        all_pc{i,j}=place_cells;
+        all_infoscore{i,j}=infoScore;
+        all_infoscore_norm{i,j}=infoScore_norm;
+        all_coherence{i,j}=coherencee;
+
+    end
+end
+toc;
+
+%% config 
+cond=2; % suppl 12 use 2 (circle), suppl 13 use 1 (square)
+resample_factor=[2,1,1]; % visualization dot resampling
 
 mouse_idx=[1,8,11];
 color_clust=distinguishable_colors(10);
